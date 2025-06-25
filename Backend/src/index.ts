@@ -11,9 +11,10 @@ async function main() {
 
   app.use("/api/Auth", authRoutes);
 
-  app.get(/^(?!\/api).*/, (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-  });
+  // -- for deployment
+  // app.get("*", (req: Request, res: Response) => {
+  //   res.sendFile(path.join(__dirname, "public", "index.html"));
+  // });
 
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
