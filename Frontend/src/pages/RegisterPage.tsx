@@ -13,7 +13,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import type { FormItemForRegister } from "../types/formType";
 
 const formSchema = z.object({
   username: z.string().min(3),
@@ -61,84 +70,61 @@ function RegisterPage() {
     }
   }
 
+  const formItemRenderList: FormItemForRegister[] = [
+    { name: "username", placeholder: "johndoe123" },
+    { name: "firstName", placeholder: "John" },
+    { name: "lastName", placeholder: "Dow" },
+    { name: "email", placeholder: "john@example.com", inputType: "email" },
+    { name: "password", placeholder: "******", inputType: "password" },
+  ];
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="johndoe123" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <Card className="w-full max-w-sm ">
+      <CardHeader>
+        <CardTitle>Register</CardTitle>
+        <CardDescription>
+          Fill in your personal details in order to create an account
+        </CardDescription>
+      </CardHeader>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <CardContent className="space-y-4">
+            {formItemRenderList.map((fieldToRender: FormItemForRegister) => {
+              return (
+                <FormField
+                  control={form.control}
+                  name={fieldToRender.name}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{fieldToRender.name}</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={fieldToRender.placeholder}
+                          type={fieldToRender.inputType ?? "text"}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              );
+            })}
+          </CardContent>
 
-        <FormField
-          control={form.control}
-          name="firstName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>First Name</FormLabel>
-              <FormControl>
-                <Input placeholder="John" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="lastName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Last Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Doe" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="john@example.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="******" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button type="submit" className="w-full">
-          Create User
-        </Button>
-      </form>
-    </Form>
+          <CardFooter className="flex-col w-full">
+            <Button type="submit" className="w-full">
+              Create user
+            </Button>
+            <Link to="/auth/login" className="w-full">
+              <Button variant="outline" className="w-full mt-2">
+                Already have an account?
+              </Button>
+            </Link>
+          </CardFooter>
+        </form>
+      </Form>
+    </Card>
   );
 }
 
