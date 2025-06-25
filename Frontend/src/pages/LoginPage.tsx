@@ -24,6 +24,11 @@ import {
 } from "../components/ui/card";
 import type { FormItemForLogin } from "../types/formType";
 
+// -- redux
+// import { useDispatch, useSelector } from "react-redux";
+// import { login, fetchUser } from "../store/authSlice";
+// import type { RootState, AppDispatch } from "../store/store";
+
 const loginSchema = z.object({
   username: z.string().min(3, "Username is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -33,6 +38,10 @@ type LoginData = z.infer<typeof loginSchema>;
 
 function LoginPage() {
   const { login, loggedInUser } = useAuth();
+
+  // -- redux
+  // const dispatch = useDispatch<AppDispatch>();
+  // const loggedInUser = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
 
   const form = useForm<LoginData>({
@@ -44,8 +53,13 @@ function LoginPage() {
   });
 
   const formItemRenderList: FormItemForLogin[] = [
-    { name: "username", placeholder: "johndoe123" },
-    { name: "password", placeholder: "******", inputType: "password" },
+    { name: "username", placeholder: "johndoe123", label: "User name" },
+    {
+      name: "password",
+      placeholder: "******",
+      inputType: "password",
+      label: "Password",
+    },
   ];
 
   useEffect(() => {
@@ -57,6 +71,10 @@ function LoginPage() {
   const onSubmit = async (values: LoginData) => {
     try {
       await login(values);
+
+      // -- redux
+      // await dispatch(login(values)).unwrap();
+      // await dispatch(fetchUser()).unwrap();
       console.log("Login successful:", values);
     } catch (error) {
       console.error("Login failed:", error);
@@ -78,11 +96,12 @@ function LoginPage() {
             {formItemRenderList.map((fieldToRender: FormItemForLogin) => {
               return (
                 <FormField
+                  key={fieldToRender.name}
                   control={form.control}
                   name={fieldToRender.name}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{fieldToRender.name}</FormLabel>
+                      <FormLabel>{fieldToRender.label}</FormLabel>
                       <FormControl>
                         <Input
                           placeholder={fieldToRender.placeholder}

@@ -8,8 +8,14 @@ import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 
+// import { Provider } from "react-redux";
+// import { store } from "./store/store";
+
 function App() {
   return (
+    // -- redux
+    // <Provider store={store}>
+
     <AuthProvider>
       <Routes>
         <Route path="/" element={<MainLayout />}>
@@ -33,6 +39,8 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </AuthProvider>
+
+    // </Provider>
   );
 }
 

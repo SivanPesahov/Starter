@@ -24,6 +24,11 @@ import {
 } from "../components/ui/card";
 import type { FormItemForRegister } from "../types/formType";
 
+// -- redux
+// import { useDispatch, useSelector } from "react-redux";
+// import type { RootState, AppDispatch } from "../store/store";
+// import { register } from "../store/slices/authSlice";
+
 const formSchema = z.object({
   username: z.string().min(3),
   firstName: z.string().min(1),
@@ -36,6 +41,10 @@ type FormData = z.infer<typeof formSchema>;
 
 function RegisterPage() {
   const { register, loggedInUser } = useAuth();
+
+  // -- redux
+  // const dispatch = useDispatch<AppDispatch>();
+  // const loggedInUser = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -64,6 +73,9 @@ function RegisterPage() {
     console.log("Submitted user:", values);
     try {
       await register(values);
+
+      // -- redux
+      // await dispatch(register(values)).unwrap();
       console.log(values);
     } catch (error: any) {
       console.log(error);
@@ -71,11 +83,21 @@ function RegisterPage() {
   }
 
   const formItemRenderList: FormItemForRegister[] = [
-    { name: "username", placeholder: "johndoe123" },
-    { name: "firstName", placeholder: "John" },
-    { name: "lastName", placeholder: "Dow" },
-    { name: "email", placeholder: "john@example.com", inputType: "email" },
-    { name: "password", placeholder: "******", inputType: "password" },
+    { name: "username", placeholder: "johndoe123", label: "User Name" },
+    { name: "firstName", placeholder: "John", label: "First Name" },
+    { name: "lastName", placeholder: "Dow", label: "Last Name" },
+    {
+      name: "email",
+      placeholder: "john@example.com",
+      inputType: "email",
+      label: "Email",
+    },
+    {
+      name: "password",
+      placeholder: "******",
+      inputType: "password",
+      label: "Password",
+    },
   ];
 
   return (
@@ -92,11 +114,12 @@ function RegisterPage() {
             {formItemRenderList.map((fieldToRender: FormItemForRegister) => {
               return (
                 <FormField
+                  key={fieldToRender.name}
                   control={form.control}
                   name={fieldToRender.name}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{fieldToRender.name}</FormLabel>
+                      <FormLabel>{fieldToRender.label}</FormLabel>
                       <FormControl>
                         <Input
                           placeholder={fieldToRender.placeholder}
