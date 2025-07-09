@@ -72,6 +72,9 @@ function HomePage() {
     getAllUsers();
   }, []);
 
+  // debugging tool - used with vs code debugger or chrome devtools
+  // debugger;
+
   return (
     <>
       <h1>Users</h1>
